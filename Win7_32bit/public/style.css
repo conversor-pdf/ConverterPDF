@@ -69,10 +69,22 @@ body {
     flex: 2;
 }
 
+.logo-wrapper {
+    width: 42px;
+    height: 42px;
+    overflow: hidden;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+}
+
 .nav-logo {
-    height: 32px;
-    width: auto;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Faz o preenchimento sem distorcer */
+    transform: scale(1.3); /* Dá o zoom para remover as bordas pretas */
 }
 
 .nav-title {
