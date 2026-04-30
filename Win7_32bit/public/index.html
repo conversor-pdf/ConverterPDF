@@ -22,6 +22,10 @@
                         <i class="ph ph-clock-counter-clockwise"></i>
                         Histórico
                     </button>
+                    <button class="tab-btn" data-tab="gabarito-tab">
+                        <i class="ph ph-grid-four"></i>
+                        Gabarito A4
+                    </button>
                 </div>
             </div>
 
@@ -114,6 +118,91 @@
                     </button>
                 </div>
                 <div class="history-list" id="history-list"></div>
+            </section>
+
+            <!-- Gabarito Tab -->
+            <section id="gabarito-tab" class="tab-content" style="display: none;">
+                <div class="gabarito-layout">
+                    <!-- Left: A4 Preview -->
+                    <div class="gabarito-preview-container">
+                        <div class="a4-page" id="a4-preview">
+                            <div class="gabarito-grid">
+                                <!-- 15 cells will be here -->
+                                <div class="grid-cell" data-index="0"></div>
+                                <div class="grid-cell" data-index="1"></div>
+                                <div class="grid-cell" data-index="2"></div>
+                                <div class="grid-cell" data-index="3"></div>
+                                <div class="grid-cell" data-index="4"></div>
+                                <div class="grid-cell" data-index="5"></div>
+                                <div class="grid-cell" data-index="6"></div>
+                                <div class="grid-cell" data-index="7"></div>
+                                <div class="grid-cell" data-index="8"></div>
+                                <div class="grid-cell" data-index="9"></div>
+                                <div class="grid-cell" data-index="10"></div>
+                                <div class="grid-cell" data-index="11"></div>
+                                <div class="grid-cell" data-index="12"></div>
+                                <div class="grid-cell" data-index="13"></div>
+                                <div class="grid-cell" data-index="14"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Controls -->
+                    <div class="gabarito-controls">
+                        <div class="header-titles">
+                            <h1>Montagem A4</h1>
+                            <p>Distribua 15 imagens em uma folha</p>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="section-title">Ações</h3>
+                            <div class="action-grid">
+                                <button class="btn-primary" id="import-imgs-btn" style="background: var(--bg-card); border: 1px solid var(--primary-red); color: var(--primary-red);">
+                                    <i class="ph ph-upload-simple"></i>
+                                    Importar Imagens
+                                </button>
+                                <input type="file" id="gabarito-file-input" multiple accept="image/*" style="display: none;">
+                                
+                                <button class="btn-primary" id="allocate-btn">
+                                    <i class="ph ph-magic-wand"></i>
+                                    Alocar Imagens
+                                </button>
+                                <button class="btn-primary" id="clear-grid-btn" style="background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main);">
+                                    <i class="ph ph-eraser"></i>
+                                    Limpar Grade
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="section-title">Exportar Gabarito</h3>
+                            <div class="export-options">
+                                <button class="export-btn" data-format="pdf">
+                                    <i class="ph ph-file-pdf"></i>
+                                    PDF
+                                </button>
+                                <button class="export-btn" data-format="docx">
+                                    <i class="ph ph-file-doc"></i>
+                                    Word
+                                </button>
+                                <button class="export-btn" data-format="png">
+                                    <i class="ph ph-image"></i>
+                                    PNG
+                                </button>
+                                <button class="export-btn" data-format="jpg">
+                                    <i class="ph ph-file-jpg"></i>
+                                    JPEG
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 24px; padding: 16px; background: rgba(239, 68, 68, 0.05); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.1);">
+                           <p style="font-size: 12px; color: var(--text-muted);">
+                              <strong>Dica:</strong> As imagens que você converter na aba principal ficarão disponíveis aqui para montagem.
+                           </p>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
 

@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/convert", "destination": "/api/convert.py" },
+    { "source": "/api/(.*)", "destination": "/api/convert.py" },
     { "source": "/(.*)", "destination": "/Win7_32bit/public/$1" }
   ]
 }

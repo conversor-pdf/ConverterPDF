@@ -2,6 +2,7 @@
 const tabBtns = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
 const historyCount = document.getElementById('history-count');
+let currentSessionImages = []; // Stores blobs of converted images
 
 tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -10,9 +11,13 @@ tabBtns.forEach(btn => {
         btn.classList.add('active');
         const tabId = btn.getAttribute('data-tab');
         document.getElementById(tabId).style.display = 'block';
+        
         if (tabId === 'history-tab') {
             historyCount.style.display = 'inline';
             loadHistory();
+        } else if (tabId === 'gabarito-tab') {
+            historyCount.style.display = 'none';
+            // Optional: Auto-load something here
         } else {
             historyCount.style.display = 'none';
         }
@@ -143,6 +148,14 @@ convertBtn.addEventListener('click', async () => {
             showStatus('Conversão concluída com sucesso!', 'Pronto', false);
             addToHistory(currentFiles, selectedFormat);
             
+            // Adicionar ao array da sessão para o Gabarito
+            const blobUrl = URL.createObjectURL(blob);
+            currentSessionImages.push({
+                url: blobUrl,
+                blob: blob,
+                name: currentFiles[0].name
+            });
+            
             // Limpar lista após sucesso
             currentFiles = [];
             document.getElementById('file-input').value = '';
@@ -222,4 +235,115 @@ document.getElementById('clear-history-btn').addEventListener('click', () => {
         localStorage.removeItem('wtech_history');
         loadHistory();
     }
+});
+
+// Gabarito Logic
+const allocateBtn = document.getElementById('allocate-btn');
+const clearGridBtn = document.getElementById('clear-grid-btn');
+const importImgsBtn = document.getElementById('import-imgs-btn');
+const gabaritoFileInput = document.getElementById('gabarito-file-input');
+const gridCells = document.querySelectorAll('.grid-cell');
+const exportBtns = document.querySelectorAll('.export-btn');
+
+importImgsBtn.addEventListener('click', () => gabaritoFileInput.click());
+
+gabaritoFileInput.addEventListener('change', (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    files.forEach(file => {
+        const blobUrl = URL.createObjectURL(file);
+        currentSessionImages.push({
+            url: blobUrl,
+            blob: file,
+            name: file.name
+        });
+    });
+
+    showStatus(`${files.length} imagens importadas!`, 'Pronto', false);
+    // Opcional: auto-alocar se a grade estiver vazia?
+    if (Array.from(gridCells).every(c => c.innerHTML === '')) {
+        allocateBtn.click();
+    }
+});
+
+allocateBtn.addEventListener('click', () => {
+    if (currentSessionImages.length === 0) {
+        alert('Nenhuma imagem convertida nesta sessão para alocar.');
+        return;
+    }
+
+    // Limpar grade antes
+    gridCells.forEach(cell => cell.innerHTML = '');
+
+    // Alocar até 15 imagens
+    currentSessionImages.slice(0, 15).forEach((imgData, index) => {
+        if (index < gridCells.length) {
+            const img = document.createElement('img');
+            img.src = imgData.url;
+            gridCells[index].appendChild(img);
+        }
+    });
+    
+    showStatus('Imagens alocadas no gabarito!', 'Pronto', false);
+});
+
+clearGridBtn.addEventListener('click', () => {
+    gridCells.forEach(cell => cell.innerHTML = '');
+    showStatus('Grade limpa', 'Pronto', false);
+});
+
+exportBtns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const format = btn.getAttribute('data-format');
+        const imagesInGrid = [];
+        
+        // Coletar apenas as imagens que estão na grade
+        gridCells.forEach(cell => {
+            const img = cell.querySelector('img');
+            if (img) {
+                // Encontrar o blob original correspondente
+                const imgData = currentSessionImages.find(d => d.url === img.src);
+                if (imgData) imagesInGrid.push(imgData.blob);
+            }
+        });
+
+        if (imagesInGrid.length === 0) {
+            alert('A grade está vazia. Aloque imagens antes de exportar.');
+            return;
+        }
+
+        showStatus(`Exportando para ${format.toUpperCase()}...`, 'Processando...', true);
+
+        const formData = new FormData();
+        formData.append('format', format);
+        imagesInGrid.forEach((blob, i) => {
+            formData.append('images', blob, `image_${i}.png`);
+        });
+
+        try {
+            const response = await fetch('/api/export-grid', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const resultBlob = await response.blob();
+                const url = window.URL.createObjectURL(resultBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `gabarito_wtech.${format}`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                showStatus('Exportação concluída!', 'Pronto', false);
+            } else {
+                throw new Error('Falha no servidor ao exportar');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Erro ao exportar gabarito: ' + err.message);
+            showStatus('Erro na exportação', 'Pronto', true);
+        }
+    });
 });

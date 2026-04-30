@@ -1,2 +1,4 @@
 flask
 pymupdf
+pillow
+python-docx

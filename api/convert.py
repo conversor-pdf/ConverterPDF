@@ -4,6 +4,9 @@ import io
 import zipfile
 import os
 import sys
+from PIL import Image
+from docx import Document
+from docx.shared import Inches, Cm
 
 app = Flask(__name__)
 
@@ -79,5 +82,79 @@ def convert():
         print(f"Erro fatal: {str(e)}", file=sys.stderr)
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route('/api/export-grid', methods=['POST'])
+def export_grid():
+    try:
+        export_format = request.form.get('format', 'pdf').lower()
+        image_files = request.files.getlist('images')
+        
+        # A4 size at 150 DPI (approx 1240 x 1754 px)
+        a4_w, a4_h = 1240, 1754
+        cols, rows = 5, 3
+        cell_w = a4_w // cols
+        cell_h = a4_h // rows
+        
+        # Prepare the canvas
+        canvas = Image.new('RGB', (a4_w, a4_h), 'white')
+        
+        for i, img_file in enumerate(image_files[:15]):
+            img = Image.open(img_file)
+            # Resize keeping proportions or fill? User said "preencher".
+            # Let's use resize to fill the rectangle.
+            img_resized = img.resize((cell_w, cell_h), Image.Resampling.LANCZOS)
+            
+            x = (i % cols) * cell_w
+            y = (i // cols) * cell_h
+            canvas.paste(img_resized, (x, y))
+            
+        output = io.BytesIO()
+        
+        if export_format == 'pdf':
+            canvas.save(output, format='PDF')
+            mimetype = 'application/pdf'
+            filename = 'gabarito_wtech.pdf'
+        elif export_format == 'docx':
+            doc = Document()
+            # Set margins to 0 for maximum space? No, let's keep some.
+            section = doc.sections[0]
+            section.page_width = Cm(21)
+            section.page_height = Cm(29.7)
+            section.left_margin = Cm(0.5)
+            section.right_margin = Cm(0.5)
+            section.top_margin = Cm(0.5)
+            section.bottom_margin = Cm(0.5)
+            
+            table = doc.add_table(rows=rows, cols=cols)
+            
+            for i, img_file in enumerate(image_files[:15]):
+                img_file.seek(0)
+                row = i // cols
+                col = i % cols
+                cell = table.cell(row, col)
+                paragraph = cell.paragraphs[0]
+                run = paragraph.add_run()
+                
+                # Temp buffer for this image
+                img_temp = io.BytesIO(img_file.read())
+                # Scale width to fit column (approx 4cm)
+                run.add_picture(img_temp, width=Cm(4))
+                
+            doc.save(output)
+            mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            filename = 'gabarito_wtech.docx'
+        elif export_format in ['png', 'jpg', 'jpeg']:
+            fmt = 'JPEG' if export_format in ['jpg', 'jpeg'] else 'PNG'
+            canvas.save(output, format=fmt)
+            mimetype = f'image/{export_format}'
+            filename = f'gabarito_wtech.{export_format}'
+        else:
+            return jsonify({"success": False, "error": "Formato não suportado"}), 400
+            
+        output.seek(0)
+        return send_file(output, mimetype=mimetype, as_attachment=True, download_name=filename)
+    except Exception as e:
+        print(f"Erro no export-grid: {str(e)}", file=sys.stderr)
+        return jsonify({"success": False, "error": str(e)}), 500
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

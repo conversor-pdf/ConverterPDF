@@ -5,6 +5,7 @@ __pycache__/
 *.pyc
 *.exe
 *.spec
+run_local.py
 .vscode/
 .idea/
 .env

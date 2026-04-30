@@ -566,7 +566,108 @@ body {
     gap: 8px;
 }
 
-/* Utilities */
-.hidden {
-    display: none !important;
+/* Gabarito Layout */
+.gabarito-layout {
+    display: flex;
+    gap: 32px;
+    height: 100%;
+}
+
+.gabarito-preview-container {
+    flex: 1.5;
+    display: flex;
+    justify-content: center;
+    background-color: #0d0d0f;
+    padding: 20px;
+    border-radius: 16px;
+    overflow-y: auto;
+}
+
+.a4-page {
+    width: 210mm;
+    height: 297mm;
+    background-color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform-origin: top center;
+    transform: scale(0.6); /* Default scale for preview */
+}
+
+/* For small screens or smaller containers */
+@media (max-height: 900px) {
+    .a4-page { transform: scale(0.5); }
+}
+
+.gabarito-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ddd;
+}
+
+.grid-cell {
+    border: 1px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #f9f9f9;
+}
+
+.grid-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gabarito-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.action-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+/* No desktop, os botões de alocar e limpar podem ficar lado a lado */
+@media (min-width: 768px) {
+    .action-grid {
+        grid-template-columns: 1fr;
+    }
+    /* Mas talvez o alocar e limpar devessem ficar juntos */
+}
+
+.export-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.export-btn {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.export-btn:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--primary-red);
+}
+
+.export-btn i {
+    font-size: 24px;
+    color: var(--primary-red);
 }
