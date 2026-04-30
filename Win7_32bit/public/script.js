@@ -247,21 +247,58 @@ const exportBtns = document.querySelectorAll('.export-btn');
 
 importImgsBtn.addEventListener('click', () => gabaritoFileInput.click());
 
-gabaritoFileInput.addEventListener('change', (e) => {
+gabaritoFileInput.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
-    files.forEach(file => {
-        const blobUrl = URL.createObjectURL(file);
-        currentSessionImages.push({
-            url: blobUrl,
-            blob: file,
-            name: file.name
-        });
-    });
+    for (const file of files) {
+        if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+            showStatus(`Processando PDF: ${file.name}...`, 'Processando...', true);
+            const formData = new FormData();
+            formData.append('file', file);
 
-    showStatus(`${files.length} imagens importadas!`, 'Pronto', false);
-    // Opcional: auto-alocar se a grade estiver vazia?
+            try {
+                const response = await fetch('/api/convert-gabarito', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    result.images.forEach(imgData => {
+                        // Converter base64 de volta para blob para manter consistência
+                        const byteCharacters = atob(imgData.data);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        const blob = new Blob([byteArray], {type: 'image/png'});
+                        const blobUrl = URL.createObjectURL(blob);
+                        
+                        currentSessionImages.push({
+                            url: blobUrl,
+                            blob: blob,
+                            name: imgData.name
+                        });
+                    });
+                    showStatus(`PDF ${file.name} importado com sucesso!`, 'Pronto', false);
+                }
+            } catch (err) {
+                console.error(err);
+                showStatus('Erro ao processar PDF', 'Pronto', true);
+            }
+        } else {
+            const blobUrl = URL.createObjectURL(file);
+            currentSessionImages.push({
+                url: blobUrl,
+                blob: file,
+                name: file.name
+            });
+        }
+    }
+
+    showStatus(`Arquivos importados!`, 'Pronto', false);
     if (Array.from(gridCells).every(c => c.innerHTML === '')) {
         allocateBtn.click();
     }

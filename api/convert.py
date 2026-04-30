@@ -156,5 +156,33 @@ def export_grid():
         print(f"Erro no export-grid: {str(e)}", file=sys.stderr)
         return jsonify({"success": False, "error": str(e)}), 500
 
+import base64
+
+@app.route('/api/convert-gabarito', methods=['POST'])
+def convert_gabarito():
+    try:
+        if 'file' not in request.files:
+            return jsonify({"success": False, "error": "Nenhum arquivo enviado"}), 400
+        
+        file = request.files['file']
+        pdf_data = file.read()
+        doc = fitz.open(stream=pdf_data, filetype="pdf")
+        
+        images = []
+        for i in range(len(doc)):
+            page = doc.load_page(i)
+            pix = page.get_pixmap()
+            img_data = pix.tobytes("png")
+            # Encode to base64 for JSON response
+            b64_data = base64.b64encode(img_data).decode('utf-8')
+            images.append({
+                "name": f"{os.path.splitext(file.filename)[0]}_pag_{i+1}.png",
+                "data": b64_data
+            })
+        doc.close()
+        return jsonify({"success": True, "images": images})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
