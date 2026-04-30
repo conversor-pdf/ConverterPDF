@@ -152,8 +152,14 @@ convertBtn.addEventListener('click', async () => {
             
             document.querySelector('[data-tab="history-tab"]').click();
         } else {
-            const error = await response.json();
-            throw new Error(error.error || 'Erro na conversão');
+            let errorMsg = 'Erro na conversão';
+            try {
+                const error = await response.json();
+                errorMsg = error.error || errorMsg;
+            } catch (jsonErr) {
+                errorMsg = `Erro do servidor (${response.status}): O servidor não retornou uma resposta válida.`;
+            }
+            throw new Error(errorMsg);
         }
     } catch (e) {
         showStatus('Erro: ' + e.message, 'Erro', false, true);
