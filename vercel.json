@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/Win7_32bit/api/index.py" },
+    { "source": "/(.*)", "destination": "/Win7_32bit/public/$1" }
+  ]
+}
