@@ -203,15 +203,23 @@ function loadHistory() {
 
     list.innerHTML = history.map(item => `
         <div class="history-item">
-            <div class="history-icon png-icon" style="background: rgba(139, 92, 246, 0.1); color: #8B5CF6; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 16px;"><i class="ph-fill ph-image"></i></div>
+            <div class="history-icon png-icon" style="background: rgba(239, 68, 68, 0.1); color: #EF4444; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 16px;"><i class="ph-fill ph-image"></i></div>
             <div class="history-details" style="flex: 1;">
                 <h3 style="font-size: 14px; font-weight: 500; margin-bottom: 4px;">${item.name}</h3>
                 <p style="font-size: 12px; color: var(--text-muted);">Convertido de ${item.original}</p>
             </div>
             <div class="history-meta" style="display: flex; align-items: center; gap: 16px; margin-right: 24px;">
-                <span class="badge png-badge" style="background: #8B5CF6; color: white; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">${item.format.toUpperCase()}</span>
+                <span class="badge png-badge" style="background: #EF4444; color: white; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">${item.format.toUpperCase()}</span>
                 <span class="history-size-time" style="font-size: 11px; color: var(--text-muted); line-height: 1.4;">Web Session<br>${new Date(item.date).toLocaleTimeString()}</span>
             </div>
         </div>
     `).join('');
 }
+
+// Clear History Logic
+document.getElementById('clear-history-btn').addEventListener('click', () => {
+    if (confirm('Tem certeza que deseja excluir todo o histórico de conversões?')) {
+        localStorage.removeItem('wtech_history');
+        loadHistory();
+    }
+});

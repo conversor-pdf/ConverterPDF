@@ -103,9 +103,15 @@
 
             <!-- History Tab -->
             <section id="history-tab" class="tab-content" style="display: none;">
-                <div class="header-titles">
-                    <h1>Histórico Local</h1>
-                    <p>Arquivos que você converteu nesta sessão</p>
+                <div class="header-titles" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1>Histórico Local</h1>
+                        <p>Arquivos que você converteu nesta sessão</p>
+                    </div>
+                    <button id="clear-history-btn" style="background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;">
+                        <i class="ph ph-trash"></i>
+                        Limpar Histórico
+                    </button>
                 </div>
                 <div class="history-list" id="history-list"></div>
             </section>
