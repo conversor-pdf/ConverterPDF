@@ -1,0 +1,21 @@
+INSTRUÇÕES PARA VERSÃO WINDOWS 7 (32 BITS)
+
+Para gerar o executável que funcione em Windows 7 de 32 bits, você precisa seguir estas regras obrigatoriamente:
+
+1. VERSÃO DO PYTHON:
+   O Windows 7 NÃO suporta o Python 3.9 ou superior. 
+   Você deve instalar o **Python 3.8.10 (versão de 32 bits / x86)**.
+
+2. ARQUITETURA:
+   Para que o programa seja 32 bits, ele deve ser compilado em um ambiente de 32 bits. 
+   Se você estiver em um Windows 64 bits, instale a versão "Windows installer (32-bit)" do Python 3.8.10.
+
+3. COMO COMPILAR:
+   - Abra a pasta "Win7_32bit".
+   - Certifique-se que o comando 'python' no seu terminal é o 3.8.10 (32-bit).
+   - Execute o arquivo 'build.bat' desta pasta.
+
+4. DEPENDÊNCIAS:
+   O build.bat já está configurado para instalar as bibliotecas necessárias.
+
+OBS: A interface (Eel/Chrome/Edge) funcionará normalmente desde que o usuário final tenha um navegador moderno ou o Chrome instalado.

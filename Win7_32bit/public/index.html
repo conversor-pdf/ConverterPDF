@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wtech PDF Converter - WEB</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <header class="top-nav">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="converter-tab">
+                    <i class="ph ph-arrows-left-right"></i>
+                    Converter
+                </button>
+                <button class="tab-btn" data-tab="history-tab">
+                    <i class="ph ph-clock-counter-clockwise"></i>
+                    Histórico
+                </button>
+            </div>
+            <div class="web-badge" style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid rgba(59, 130, 246, 0.3);">
+                VERSÃO WEB
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            
+            <!-- Converter Tab -->
+            <section id="converter-tab" class="tab-content active">
+                <div class="header-titles">
+                    <h1>Converter PDF para Imagem</h1>
+                    <p>Converta seus arquivos PDF de forma rápida direto no navegador</p>
+                </div>
+
+                <!-- Drop Zone -->
+                <div class="drop-zone" id="drop-zone">
+                    <div class="drop-zone-content">
+                        <div class="file-icon-wrapper">
+                            <i class="ph-fill ph-file-pdf"></i>
+                            <div class="plus-badge"><i class="ph ph-plus"></i></div>
+                        </div>
+                        <p class="drop-text">Arraste e solte seus PDFs aqui</p>
+                        <p class="or-text">ou</p>
+                        <button class="btn-primary select-file-btn" onclick="document.getElementById('file-input').click()">Selecionar arquivo</button>
+                        <input type="file" id="file-input" accept=".pdf" style="display: none;" multiple>
+                    </div>
+                </div>
+
+                <!-- Selected Files Display -->
+                <div class="selected-files-container" id="selected-files-container" style="display: none;">
+                    <div class="selected-files-header">
+                        <h3>Arquivos Selecionados (<span id="file-count">0</span>)</h3>
+                        <button class="remove-all-btn" id="remove-all-btn">Limpar Tudo</button>
+                    </div>
+                    <div class="selected-files-list" id="selected-files-list"></div>
+                </div>
+
+                <!-- Formats Grid (Simplified for Web/Vercel) -->
+                <div class="section-title">Converter para</div>
+                <div class="formats-grid">
+                    <button class="format-card active" data-format="png">
+                        <div class="format-icon png-icon"><i class="ph-fill ph-image"></i></div>
+                        <span class="format-name">PNG</span>
+                        <span class="format-ext">.png</span>
+                    </button>
+                    <button class="format-card" data-format="jpg">
+                        <div class="format-icon html-icon" style="color: #FFB800;"><i class="ph-fill ph-image-square"></i></div>
+                        <span class="format-name">JPG</span>
+                        <span class="format-ext">.jpg</span>
+                    </button>
+                </div>
+
+                <div style="margin-top: 24px; padding: 16px; background: rgba(59, 130, 246, 0.05); border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.1);">
+                   <p style="font-size: 12px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 8px;">
+                      <i class="ph ph-info" style="color: #3B82F6; font-size: 16px; flex-shrink: 0;"></i>
+                      <span><strong>Nota:</strong> Na versão Web, focamos em conversão para Imagem para garantir a velocidade e estabilidade na nuvem.</span>
+                   </p>
+                </div>
+
+                <!-- Action Button -->
+                <button class="btn-primary action-btn" id="convert-btn" disabled style="margin-top: 24px;">
+                    <i class="ph ph-arrows-clockwise"></i>
+                    Converter agora
+                </button>
+            </section>
+
+            <!-- History Tab -->
+            <section id="history-tab" class="tab-content" style="display: none;">
+                <div class="header-titles">
+                    <h1>Histórico Local</h1>
+                    <p>Arquivos que você converteu nesta sessão</p>
+                </div>
+                <div class="history-list" id="history-list"></div>
+            </section>
+        </main>
+
+        <!-- Footer StatusBar -->
+        <footer class="status-bar">
+            <div class="status-left">
+                <span class="status-dot"></span>
+                <span id="status-text">Pronto</span>
+            </div>
+            <div class="status-right">
+                <span id="history-count" style="display: none;">0 itens</span>
+                <span>Wtech Web v1.0</span>
+            </div>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
