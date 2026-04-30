@@ -6,8 +6,8 @@
     --text-main: #E2E2E2;
     --text-muted: #9CA3AF;
     
-    --primary-blue: #3B82F6;
-    --primary-blue-hover: #2563EB;
+    --primary-red: #EF4444;
+    --primary-red-hover: #DC2626;
     
     /* Format Colors */
     --color-docx: #2B579A;
@@ -110,7 +110,7 @@ body {
 }
 
 .tab-btn.active {
-    background-color: var(--primary-blue);
+    background-color: var(--primary-red);
     color: white;
 }
 
@@ -168,7 +168,7 @@ body {
 }
 
 .drop-zone.dragover {
-    border-color: var(--primary-blue);
+    border-color: var(--primary-red);
     background-color: rgba(59, 130, 246, 0.05);
 }
 
@@ -184,7 +184,7 @@ body {
     position: absolute;
     bottom: 0;
     right: -4px;
-    background-color: var(--primary-blue);
+    background-color: var(--primary-red);
     color: white;
     border-radius: 50%;
     width: 20px;
@@ -209,7 +209,7 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--primary-blue);
+    background-color: var(--primary-red);
     color: white;
     border: none;
     padding: 10px 24px;
@@ -225,7 +225,7 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-blue-hover);
+    background-color: var(--primary-red-hover);
 }
 
 .btn-primary:disabled {
@@ -319,7 +319,7 @@ body {
 }
 
 .format-card.active {
-    border-color: var(--primary-blue);
+    border-color: var(--primary-red);
     background-color: rgba(59, 130, 246, 0.1);
 }
 
@@ -389,8 +389,8 @@ body {
 }
 
 .checkbox-label input:checked ~ .checkmark {
-    background-color: var(--primary-blue);
-    border-color: var(--primary-blue);
+    background-color: var(--primary-red);
+    border-color: var(--primary-red);
 }
 
 .checkmark:after {
